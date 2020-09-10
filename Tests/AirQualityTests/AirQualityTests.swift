@@ -8,8 +8,9 @@ final class AirQualityTests: XCTestCase {
         
         let someVal = AirQualityIndex.compute(forPollutant: .PM_25, atConcentration: 37.0)
         
-        if case .success(let aqi) = someVal {
+        if case .success(let (aqi, c)) = someVal {
             XCTAssertEqual(aqi, 105)
+            XCTAssertEqual(c, .UnhealthySensitive)
         } else {
             XCTFail("Bad AQI result")
         }

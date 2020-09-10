@@ -91,7 +91,7 @@ public struct AirQualityIndex {
     }
     
     public static func compute(forPollutant pollutant: Pollutant,
-                               atConcentration concentration: Double) -> Result<Int,AqiError> {
+                               atConcentration concentration: Double) -> Result<(score: Int, category: AqiCategory),AqiError> {
         
         
         // step 1: for concentration, figure out which category bucket we are in:
@@ -116,7 +116,9 @@ public struct AirQualityIndex {
         let part_1 = (i_high - i_low) / (c_high - c_low)
         let part_2 = (concentration - c_low)
         let i = part_1 * part_2 + i_low
-        return .success(Int(i.rounded()))
+        return .success(
+            (Int(i.rounded()), targetCategory.category)
+        )
         
     }
     
