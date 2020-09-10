@@ -2,14 +2,32 @@ import XCTest
 @testable import AirQuality
 
 final class AirQualityTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(AirQuality().text, "Hello, World!")
+    
+    
+    func testSuccessfulCompute() {
+        
+        let someVal = AirQualityIndex.compute(forPollutant: .PM_25, atConcentration: 37.0)
+        
+        if case .success(let aqi) = someVal {
+            XCTAssertEqual(aqi, 105)
+        } else {
+            XCTFail("Bad AQI result")
+        }
+        
+    }
+    
+    func testErrorCompute() {
+        let anotherVal = AirQualityIndex.compute(forPollutant: .PM_25, atConcentration: 600.0)
+        if case .failure(let e) = anotherVal {
+            XCTAssertEqual(e, .ConcentrationOutOfRange)
+        } else {
+            XCTFail("Should have gotten error, since input was out of range")
+        }
+
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testSuccessfulCompute", testSuccessfulCompute),
+        ("testErrorCompute", testErrorCompute)
     ]
 }
